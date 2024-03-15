@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "ionic serve",
-        "build": "tsc && ionic capacitor build",
+        "build": "tsc && ionic capacitor build android",
         "preview": "vite preview"
     },
     "dependencies": {
