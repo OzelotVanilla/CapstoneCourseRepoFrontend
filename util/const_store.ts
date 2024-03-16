@@ -7,7 +7,7 @@ const default_hovering_buttons_unit: HoveringButtonUnit = {
     aria_label: ""
 }
 
-export const default_hovering_buttons_function: HoveringButtonsState = {
+export const default_hovering_buttons_states: HoveringButtonsState = {
     upper_left: { ...default_hovering_buttons_unit },
     up: { ...default_hovering_buttons_unit },
     upper_right: { ...default_hovering_buttons_unit },

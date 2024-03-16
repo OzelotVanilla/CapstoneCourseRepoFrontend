@@ -1,48 +1,44 @@
-import { setupIonicReact, IonApp, IonRouterOutlet, IonPage } from "@ionic/react";
+import { setupIonicReact, IonApp, IonRouterOutlet, IonPage, useIonRouter } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router";
-import WelcomePage from "./welcome_page/welcome.page";
-import React, { Dispatch, SetStateAction, createContext, useReducer, useState } from "react";
+import React, { Dispatch, SetStateAction, createContext, useContext, useReducer, useState } from "react";
+import { default_hovering_buttons_states, hovering_button_positions } from "../util/const_store";
+import WelcomePage from "./welcome/welcome.page";
+import NavigationPage from "./navigation/navigation.page";
+import VideoChatPage from "./video_chat/video_chat.page";
 
 import "./app.scss"
-import { default_hovering_buttons_function as default_hovering_buttons_onclick, hovering_button_positions } from "../util/const_store";
 
 
 setupIonicReact();
 
-export const page_description_setter_context = createContext<Dispatch<SetStateAction<string>>>(() => { })
-export const hovering_buttons_changer_context = createContext<Dispatch<ChangeHoveringButtonAction>>(() => { })
+export const page_description_context = createContext({
+    page_description: "", setPageDescription: (() => { }) as Dispatch<SetStateAction<string>>
+})
+export const hovering_buttons_changer_context = createContext({
+    hovering_buttons_states: default_hovering_buttons_states,
+    dispatchHoveringButtonsChange: (() => { }) as Dispatch<ChangeHoveringButtonAction>
+})
 
 export default function App()
 {
-    return (<IonApp className="IonAppRoot">
+    return (<IonApp className="IonAppRoot"><AppContext>
         <AppRouter />
-    </IonApp>)
+    </AppContext></IonApp>)
 }
 
 function AppContext({ children }: AppReactContext_Props)
 {
     let [page_description, setPageDescription] = useState("")
-    let [hovering_buttons_onclick, dispatchHoveringButtonsChange] = useReducer(
-        changeHoveringButtonsFunc, default_hovering_buttons_onclick
+    let [hovering_buttons_states, dispatchHoveringButtonsChange] = useReducer(
+        changeHoveringButtonsFunc, default_hovering_buttons_states
     )
 
-    function Contexts({ children }: { children: React.ReactNode })
-    {
-        return (
-            <page_description_setter_context.Provider value={setPageDescription}>
-                <hovering_buttons_changer_context.Provider value={dispatchHoveringButtonsChange}>
-                    {children}
-                </hovering_buttons_changer_context.Provider>
-            </page_description_setter_context.Provider>
-        )
-    }
-
-    return (<Contexts>
-        <p id="page_description" aria-live="polite">{page_description}</p>
-        <HoveringButtons button_states={hovering_buttons_onclick} />
-        {children}
-    </Contexts>)
+    return (<page_description_context.Provider value={{ page_description, setPageDescription }}>
+        <hovering_buttons_changer_context.Provider value={{ hovering_buttons_states, dispatchHoveringButtonsChange }}>
+            {children}
+        </hovering_buttons_changer_context.Provider>
+    </page_description_context.Provider>)
 }
 
 type AppReactContext_Props = {
@@ -51,11 +47,15 @@ type AppReactContext_Props = {
 
 function AppRouter({ }: AppRouter_Props)
 {
-    return (<IonReactRouter><IonRouterOutlet>
-        <Route path="/">
-            {getRoutablePage(<WelcomePage />)}
-        </Route>
-    </IonRouterOutlet></IonReactRouter>)
+    const router = useIonRouter()
+
+    return (<IonReactRouter>
+        <IonRouterOutlet animated={false}>
+            <Route exact path="/">{getRoutablePage(<WelcomePage />)}</Route>
+            <Route exact path="/navigation">{getRoutablePage(<NavigationPage />)}</Route>
+        </IonRouterOutlet>
+        {/* <IonRouterOutlet></IonRouterOutlet> */}
+    </IonReactRouter>)
 }
 
 type AppRouter_Props = {
@@ -63,9 +63,14 @@ type AppRouter_Props = {
 
 function getRoutablePage(page: React.ReactNode)
 {
-    return (<IonPage><AppContext>
+    const { page_description } = useContext(page_description_context)
+    const { hovering_buttons_states } = useContext(hovering_buttons_changer_context)
+
+    return (<IonPage>
+        <p id="page_description" aria-live="polite">{page_description}</p>
+        <HoveringButtons button_states={hovering_buttons_states} />
         {page}
-    </AppContext></IonPage>)
+    </IonPage>)
 }
 
 function HoveringButtons({ button_states }: HoveringButtons_Props)
@@ -94,18 +99,32 @@ function changeHoveringButtonsFunc(buttons_states: HoveringButtonsState, action:
     {
         case "default":
             {
-                return default_hovering_buttons_onclick
+                return default_hovering_buttons_states
             }
 
         case "change":
             {
-                const button_changing = action.position
-                let changed_part: HoveringButtonUnit = buttons_states[button_changing]
-                if (action.onclick != undefined) { changed_part.onclick = action.onclick }
-                if (action.content != undefined) { changed_part.content = action.content }
-                if (action.aria_label != undefined) { changed_part.aria_label = action.aria_label }
+                let result: Partial<Record<PossibleHoveringButtonPosition, HoveringButtonUnit>> = {}
+                for (const changing_request of action.buttons)
+                {
+                    const button_changing = changing_request.position
+                    let changed_part: HoveringButtonUnit = buttons_states[button_changing]
+                    if (changing_request.onclick != undefined) { changed_part.onclick = changing_request.onclick }
+                    if (changing_request.content != undefined) { changed_part.content = changing_request.content }
+                    if (changing_request.aria_label != undefined) { changed_part.aria_label = changing_request.aria_label }
 
-                return { ...buttons_states, ...changed_part }
+                    result[button_changing] = changed_part
+                }
+
+                return { ...buttons_states, ...result }
+            }
+
+        case "clear_and_change":
+            {
+                return {
+                    ...default_hovering_buttons_states,
+                    ...Object.fromEntries(action.buttons.map(({ position, ...rest }) => ([position, rest])))
+                }
             }
 
         default:
@@ -118,7 +137,8 @@ function changeHoveringButtonsFunc(buttons_states: HoveringButtonsState, action:
 
 type ChangeHoveringButtonAction =
     | { type: "default" }
-    | { type: "change", position: PossibleHoveringButtonPosition } & Partial<HoveringButtonUnit>
+    | { type: "change", buttons: ({ position: PossibleHoveringButtonPosition } & Partial<HoveringButtonUnit>)[] }
+    | { type: "clear_and_change", buttons: ({ position: PossibleHoveringButtonPosition } & Partial<HoveringButtonUnit>)[] }
 
 export type PossibleHoveringButtonPosition =
     | "upper_left" | "up" | "upper_right"
