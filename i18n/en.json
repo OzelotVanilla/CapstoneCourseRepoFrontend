@@ -1,0 +1,9 @@
+{
+    "welcome": {
+        "page_description": "You are at homepage. There are nine buttons on the screen, all actions are done by clicking them."
+    },
+    "navigation": {
+        "page_description": "You are at navigation page."
+    },
+    "video_chat": { }
+}

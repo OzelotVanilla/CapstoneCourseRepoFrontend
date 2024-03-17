@@ -1,11 +1,22 @@
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import "./welcome.page.scss"
-import { useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react"
+import { useIonRouter, useIonViewWillEnter } from "@ionic/react"
 import { hovering_buttons_changer_context, page_description_context } from "../app"
 import { App } from "@capacitor/app"
+import { getI18NText } from "../../i18n/i18n"
 
 export default function WelcomePage()
 {
+    const { setPageDescription } = useContext(page_description_context)
+    const text = getI18NText()["welcome"]
+
+    useIonViewWillEnter(
+        function ()
+        {
+            setPageDescription(text.page_description)
+        }
+    )
+
     setupHoveringButtons()
 
     return (<>
@@ -17,13 +28,17 @@ function setupHoveringButtons()
 {
     const router = useIonRouter()
     const { dispatchHoveringButtonsChange } = useContext(hovering_buttons_changer_context)
-    const { setPageDescription } = useContext(page_description_context)
+    const text = getI18NText()["welcome"]
+
+    function navigateTo(path: string)
+    {
+        router.push(path)
+    }
 
     useIonViewWillEnter(
         function ()
         {
             console.log(`Setting up hovering buttons for "WelcomePage".`)
-            // setPageDescription("New Description")
             dispatchHoveringButtonsChange({
                 type: "clear_and_change",
                 buttons: [
@@ -36,7 +51,7 @@ function setupHoveringButtons()
                     {
                         position: "left",
                         content: (<p>Navigation</p>),
-                        onclick: () => { router.push("/navigation"); console.log("Move to navigation page.") }
+                        onclick: () => { navigateTo("/navigation"); console.log("Move to navigation page.") }
                     }
                 ]
             })

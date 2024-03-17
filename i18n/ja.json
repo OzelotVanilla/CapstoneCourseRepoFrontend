@@ -1,0 +1,9 @@
+{
+    "welcome": {
+        "page_description": "機能選択頁です。画面上には九つの押釦があります。それを使って操作します。"
+    },
+    "navigation": {
+        "page_description": "道案内頁です。"
+    },
+    "video_chat": { }
+}

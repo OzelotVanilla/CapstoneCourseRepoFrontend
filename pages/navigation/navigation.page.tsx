@@ -1,12 +1,22 @@
-import { useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react"
+import { useIonRouter, useIonViewWillEnter } from "@ionic/react"
 import "./navigation.page.scss"
 import { useContext } from "react"
-import { hovering_buttons_changer_context } from "../app"
+import { hovering_buttons_changer_context, page_description_context } from "../app"
+import { getI18NText } from "../../i18n/i18n"
 
 export default function NavigationPage()
 {
     setupHoveringButtons()
-    console.log("nav")
+
+    const { setPageDescription } = useContext(page_description_context)
+    const text = getI18NText()["navigation"]
+
+    useIonViewWillEnter(
+        function ()
+        {
+            setPageDescription(text.page_description)
+        }
+    )
 
     return (<>
         <p>456</p>

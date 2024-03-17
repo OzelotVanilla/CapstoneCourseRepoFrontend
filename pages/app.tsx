@@ -1,7 +1,8 @@
 import { setupIonicReact, IonApp, IonRouterOutlet, IonPage, useIonRouter } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { Device, GetLanguageCodeResult } from "@capacitor/device"
 import { Route } from "react-router";
-import React, { Dispatch, SetStateAction, createContext, useContext, useReducer, useState } from "react";
+import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useReducer, useState } from "react";
 import { default_hovering_buttons_states, hovering_button_positions } from "../util/const_store";
 import WelcomePage from "./welcome/welcome.page";
 import NavigationPage from "./navigation/navigation.page";
