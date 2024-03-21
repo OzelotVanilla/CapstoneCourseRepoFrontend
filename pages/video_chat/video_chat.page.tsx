@@ -12,6 +12,16 @@ export default function VideoChatPage()
     const { setPageDescription } = useContext(page_description_context)
     const { text: { video_chat: text } } = getI18NText()
 
+    // console.log(`Media device: `, navigator.mediaDevices)
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: true })
+        .then(
+            media_stream =>
+            {
+                console.log(`Media stream got: `, media_stream)
+            }
+        )
+
     useIonViewWillEnter(
         function ()
         {

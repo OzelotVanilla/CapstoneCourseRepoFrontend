@@ -5,6 +5,7 @@ const config: CapacitorConfig = {
     appName: "CapstoneCourseRepoFrontend",
     webDir: "dist",
     server: {
+        hostname: "localhost",
         androidScheme: "https"
     }
 };
