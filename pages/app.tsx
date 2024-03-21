@@ -1,6 +1,5 @@
 import { setupIonicReact, IonApp, IonRouterOutlet, IonPage, useIonRouter } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Device, GetLanguageCodeResult } from "@capacitor/device"
 import { Route } from "react-router";
 import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useReducer, useState } from "react";
 import { default_hovering_buttons_states, hovering_button_positions } from "../util/const_store";
@@ -9,6 +8,7 @@ import NavigationPage from "./navigation/navigation.page";
 import VideoChatPage from "./video_chat/video_chat.page";
 
 import "./app.scss"
+import SupporterPage from "./supporter/supporter.page";
 
 
 setupIonicReact();
@@ -48,21 +48,20 @@ type AppReactContext_Props = {
 
 function AppRouter({ }: AppRouter_Props)
 {
-    const router = useIonRouter()
-
     return (<IonReactRouter>
         <IonRouterOutlet animated={false}>
-            <Route exact path="/">{getRoutablePage(<WelcomePage />)}</Route>
-            <Route exact path="/navigation">{getRoutablePage(<NavigationPage />)}</Route>
+            <Route exact path="/">{getPageForVisImpairedPeople(<WelcomePage />)}</Route>
+            <Route exact path="/navigation">{getPageForVisImpairedPeople(<NavigationPage />)}</Route>
+            <Route exact path="/voice_chat">{getPageForVisImpairedPeople(<VideoChatPage />)}</Route>
+            <Route exact path="/supporter"><IonPage><SupporterPage /></IonPage></Route>
         </IonRouterOutlet>
-        {/* <IonRouterOutlet></IonRouterOutlet> */}
     </IonReactRouter>)
 }
 
 type AppRouter_Props = {
 }
 
-function getRoutablePage(page: React.ReactNode)
+function getPageForVisImpairedPeople(page: React.ReactNode)
 {
     const { page_description } = useContext(page_description_context)
     const { hovering_buttons_states } = useContext(hovering_buttons_changer_context)
@@ -76,7 +75,7 @@ function getRoutablePage(page: React.ReactNode)
 
 function HoveringButtons({ button_states }: HoveringButtons_Props)
 {
-    return (<div id="hovering_buttons">
+    return (<div id="hovering_buttons" hidden={!button_states.visible}>
         {hovering_button_positions.map(
             position => (
                 <div id={`${position}_button`} className="HoveringButton" key={position}
@@ -117,14 +116,15 @@ function changeHoveringButtonsFunc(buttons_states: HoveringButtonsState, action:
                     result[button_changing] = changed_part
                 }
 
-                return { ...buttons_states, ...result }
+                return { ...buttons_states, ...result, visible: action.visible ?? buttons_states.visible }
             }
 
         case "clear_and_change":
             {
                 return {
                     ...default_hovering_buttons_states,
-                    ...Object.fromEntries(action.buttons.map(({ position, ...rest }) => ([position, rest])))
+                    ...Object.fromEntries(action.buttons.map(({ position, ...rest }) => ([position, rest]))),
+                    visible: action.visible ?? buttons_states.visible
                 }
             }
 
@@ -138,8 +138,8 @@ function changeHoveringButtonsFunc(buttons_states: HoveringButtonsState, action:
 
 type ChangeHoveringButtonAction =
     | { type: "default" }
-    | { type: "change", buttons: ({ position: PossibleHoveringButtonPosition } & Partial<HoveringButtonUnit>)[] }
-    | { type: "clear_and_change", buttons: ({ position: PossibleHoveringButtonPosition } & Partial<HoveringButtonUnit>)[] }
+    | { type: "change", buttons: ({ position: PossibleHoveringButtonPosition } & Partial<HoveringButtonUnit>)[], visible?: boolean }
+    | { type: "clear_and_change", buttons: ({ position: PossibleHoveringButtonPosition } & Partial<HoveringButtonUnit>)[], visible?: boolean }
 
 export type PossibleHoveringButtonPosition =
     | "upper_left" | "up" | "upper_right"
@@ -148,7 +148,7 @@ export type PossibleHoveringButtonPosition =
 
 export type HoveringButtonsState = {
     [button_position in PossibleHoveringButtonPosition]: HoveringButtonUnit
-}
+} & { visible: boolean }
 
 export type HoveringButtonUnit = {
     onclick: () => any

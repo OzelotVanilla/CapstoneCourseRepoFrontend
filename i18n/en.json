@@ -1,9 +1,22 @@
 {
     "welcome": {
-        "page_description": "You are at homepage. There are nine buttons on the screen, all actions are done by clicking them."
+        "page_description": "You are at homepage. There are nine buttons on the screen, all actions are done by clicking them.",
+        "button__exit": "Exit",
+        "button__navigation": "Start Navigation",
+        "button__video_chat": "Request a Video Chat Support",
+        "button__supporter_mode": "Enter Supporter Mode",
+        "aria_label__supporter_mode_warning": "Warning: This is only for supporter who guide people who cannot see well."
     },
     "navigation": {
-        "page_description": "You are at navigation page."
+        "page_description": "You are at navigation page.",
+        "button__back": "Go Back to Homepage.",
+        "navigation_running": "The navigation is now running.",
+        "navigation_waiting_input": "The navigation is waiting for the input of destination."
+
     },
-    "video_chat": { }
+    "video_chat": {
+        "page_description": "You are at video chat page.",
+        "button__back": "Go Back to Homepage."
+    },
+    "supporter": { }
 }

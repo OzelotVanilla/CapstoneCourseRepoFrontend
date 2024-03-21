@@ -8,6 +8,7 @@ const default_hovering_buttons_unit: HoveringButtonUnit = {
 }
 
 export const default_hovering_buttons_states: HoveringButtonsState = {
+    visible: true,
     upper_left: { ...default_hovering_buttons_unit },
     up: { ...default_hovering_buttons_unit },
     upper_right: { ...default_hovering_buttons_unit },
