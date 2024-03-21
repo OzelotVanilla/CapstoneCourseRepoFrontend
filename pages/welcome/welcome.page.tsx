@@ -8,7 +8,7 @@ import { getI18NText } from "../../i18n/i18n"
 export default function WelcomePage()
 {
     const { setPageDescription } = useContext(page_description_context)
-    const text = getI18NText()["welcome"]
+    const { text: { welcome: text } } = getI18NText()
 
     useIonViewWillEnter(
         function ()
@@ -28,7 +28,7 @@ function setupHoveringButtons()
 {
     const router = useIonRouter()
     const { dispatchHoveringButtonsChange } = useContext(hovering_buttons_changer_context)
-    const text = getI18NText()["welcome"]
+    const { text: { welcome: text } } = getI18NText()
 
     function navigateTo(path: string)
     {

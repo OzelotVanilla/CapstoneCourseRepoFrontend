@@ -1,12 +1,17 @@
 import en from "./en.json"
 import ja from "./ja.json"
 
-export function getI18NText(): typeof en
+export function getI18NText(specified_language?: string)
 {
-    switch (window.navigator.language.split("-")[0])
+    let text: typeof en
+    let locale = specified_language ?? (window.navigator.language.split("-")[0])
+
+    switch (locale)
     {
-        case "en": return en
-        case "ja": return ja
-        default: return en
+        case "en": text = en; break
+        case "ja": text = ja; break
+        default: text = en; break
     }
+
+    return { locale, text }
 }

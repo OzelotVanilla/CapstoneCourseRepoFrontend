@@ -9,7 +9,7 @@ export default function NavigationPage()
     setupHoveringButtons()
 
     const { setPageDescription } = useContext(page_description_context)
-    const text = getI18NText()["navigation"]
+    const { text: { navigation: text } } = getI18NText()
 
     useIonViewWillEnter(
         function ()
