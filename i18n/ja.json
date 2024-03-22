@@ -3,7 +3,7 @@
         "page_description": "機能選択頁です。画面上には九つの押釦があります。それを使って操作します。",
         "button__exit": "応用程式を閉じる",
         "button__navigation": "道案内を利用する",
-        "button__video_chat": "実況支援を要請する",
+        "button__video_chat": "実況支援を利用する",
         "button__supporter_mode": "私は支援者です",
         "aria_label__supporter_mode_warning": "警告: この機能は支援者専用機能であり，よく見えないの方は押さないでください。"
     },
@@ -15,7 +15,14 @@
     },
     "video_chat": {
         "page_description": "実況支援頁です。",
-        "button__back": "機能選択頁に戻る"
+        "button__back": "機能選択頁に戻る",
+        "button__request": "実況支援を要請する",
+        "page_title": "実況支援",
+        "label__chat_status": "稼働状態: ",
+        "chat_status__not_requested": "申込待ち",
+        "chat_status__requesting": "申込中",
+        "chat_status__ongoing": "進行中",
+        "chat_status__failed": "接続失敗"
     },
     "supporter": { }
 }

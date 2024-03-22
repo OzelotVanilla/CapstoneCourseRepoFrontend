@@ -12,11 +12,17 @@
         "button__back": "Go Back to Homepage.",
         "navigation_running": "The navigation is now running.",
         "navigation_waiting_input": "The navigation is waiting for the input of destination."
-
     },
     "video_chat": {
         "page_description": "You are at video chat page.",
-        "button__back": "Go Back to Homepage."
+        "button__back": "Go Back to Homepage",
+        "button__request": "Request a video chat",
+        "page_title": "Video Chat",
+        "label__chat_status": "Status: ",
+        "chat_status__not_requested": "Chat not started.",
+        "chat_status__requesting": "Requesting a chat...",
+        "chat_status__ongoing": "Chat is ongoing.",
+        "chat_status__failed": "Chat failed to establish"
     },
     "supporter": { }
 }
