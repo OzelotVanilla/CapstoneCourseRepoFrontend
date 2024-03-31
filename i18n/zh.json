@@ -1,0 +1,28 @@
+{
+    "welcome": {
+        "page_description": "您正处于主页。屏幕上有九个按钮，请通过点击按钮完成操作。",
+        "button__exit": "退出",
+        "button__navigation": "开始导航",
+        "button__video_chat": "请求视频对话支持",
+        "button__supporter_mode": "进入帮助者模式",
+        "aria_label__supporter_mode_warning": "警告：此模式只适用于为视力不好的人提供指引的支持者。"
+    },
+    "navigation": {
+        "page_description": "您正处于导航页面",
+        "button__back": "返回主页",
+        "navigation_running": "导航正在运行",
+        "navigation_waiting_input": "等待输入目的地以开始导航"
+    },
+    "video_chat": {
+        "page_description": "您正处于视频通话界面",
+        "button__back": "返回主页",
+        "button__request": "请求视频对话",
+        "page_title": "视频对话",
+        "label__chat_status": "状态：",
+        "chat_status__not_requested": "通话尚未接通",
+        "chat_status__requesting": "正在请求通话...",
+        "chat_status__ongoing": "通话开始",
+        "chat_status__failed": "未能建立通话"
+    },
+    "supporter": { }
+}
