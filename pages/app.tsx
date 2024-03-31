@@ -1,14 +1,14 @@
-import { setupIonicReact, IonApp, IonRouterOutlet, IonPage, useIonRouter } from "@ionic/react";
+import { setupIonicReact, IonApp, IonRouterOutlet, IonPage } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router";
-import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useReducer, useState } from "react";
+import React, { Dispatch, SetStateAction, createContext, useContext, useReducer, useState } from "react";
 import { default_hovering_buttons_states, hovering_button_positions } from "../util/const_store";
 import WelcomePage from "./welcome/welcome.page";
 import NavigationPage from "./navigation/navigation.page";
 import VideoChatPage from "./video_chat/video_chat.page";
+import SupporterPage from "./supporter/supporter.page";
 
 import "./app.scss"
-import SupporterPage from "./supporter/supporter.page";
 
 
 setupIonicReact();
@@ -69,7 +69,7 @@ function getPageForVisImpairedPeople(page: React.ReactNode)
     return (<IonPage>
         <p id="page_description" aria-live="polite">{page_description}</p>
         <HoveringButtons button_states={hovering_buttons_states} />
-        {page}
+        <div id="page_content">{page}</div>
     </IonPage>)
 }
 
