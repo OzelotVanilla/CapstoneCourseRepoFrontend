@@ -61,6 +61,15 @@ function AppRouter({ }: AppRouter_Props)
 type AppRouter_Props = {
 }
 
+/**
+ * Add nine hovering buttons to the page.
+ * **Must be called** at `AppRouter` if one page should have hovering buttons.
+ * 
+ * Without calling this will make hovering buttons not functioning.
+ * 
+ * @param page The page to be decorated.
+ * @returns Prepared pages as JSX Element.
+ */
 function getPageForVisImpairedPeople(page: React.ReactNode)
 {
     const { page_description } = useContext(page_description_context)

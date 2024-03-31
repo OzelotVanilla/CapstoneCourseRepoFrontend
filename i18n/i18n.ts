@@ -2,6 +2,12 @@ import en from "./en.json"
 import ja from "./ja.json"
 import zh from "./zh.json"
 
+/**
+ * Returns the page text according to language settings.
+ * 
+ * @param specified_language Will override the detected system language.
+ * @returns Object with translated text with the language used.
+ */
 export function getI18NText(specified_language?: string)
 {
     let text: typeof en
